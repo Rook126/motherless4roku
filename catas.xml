@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<categories>
+
+<category title="Featured Cams" description="Top Cams of the now" sd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01a.jpg" hd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01a.jpg">
+	<categoryLeaf title="Featured Cams" description="Top Cams of the now" feed="http://chaturbate.com/feed/latest/?wm=CR1i4"/>
+</category>
+<category title="Female Cams" description="Top Female Cams" sd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg" hd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg">
+	<categoryLeaf title="Female Cams" description="" feed="http://chaturbate.com/feed/latest/?gender=f&wm=CR1i4"/>
+</category>
+<category title="Couple Cams" description="Top Couple Cams" sd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg" hd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg">
+	<categoryLeaf title="Couple Cams" description="" feed="http://chaturbate.com/feed/latest/?gender=c&wm=CR1i4"/>
+</category>
+<category title="Trans Cams" description="Top Trans Cams" sd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg" hd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg">
+	<categoryLeaf title="Trans Cams" description="" feed="http://chaturbate.com/feed/latest/?gender=t&wm=CR1i4"/>
+</category>
+<category title="Male Cams" description="Top Male Cams" sd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg" hd_img="https://ssl-ccstatic.highwebmedia.com/affiliates/banners/cb_s300x250_01c.jpg">
+	<categoryLeaf title="Female Cams" description="" feed="http://chaturbate.com/feed/latest/?gender=m&wm=CR1i4"/>
+</category>
+</categories>
