@@ -1,1 +1,24 @@
-gh pr checkout 1
+name: Checkout Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number to check out"
+        required: true
+        type: string
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR merge ref
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.inputs.pr_number }}/merge
+          fetch-depth: 0
+
+      - name: Show commit info
+        run: |
+          git status -sb
+          git log -1 --oneline
