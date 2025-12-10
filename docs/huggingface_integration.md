@@ -115,3 +115,47 @@ Because the call returns scores per label, you can decide whether to filter, re-
 - Persist moderation decisions (for example, store the `topLabel` example above) so the Roku channel can filter feeds without calling the API repeatedly.
 
 These patterns allow you to weave Hugging Face–powered workflows into the content pipelines that feed the Roku channel.
+
+## Reverse Image Search for a Person (Upload a Photo)
+
+If you need to let a user upload a photo of a person and search the entire website for similar faces, you can pair the Roku channel with a tiny Node.js helper that runs CLIP-based image embeddings and cosine similarity. The Roku app only needs the search results; the heavy lifting happens off-device.
+
+1. **Pre-index site imagery**: fetch thumbnails for each video, run them through `imageFeatureExtraction`, and cache the embeddings alongside an identifier.
+2. **Accept an upload**: expose a minimal HTTP endpoint that receives a `multipart/form-data` upload from the remote (or a paired web UI).
+3. **Embed and score**: embed the uploaded photo with the same model, compute cosine similarity against the cached index, and return the top matches.
+
+```ts
+import { HfInference } from "@huggingface/inference";
+
+const inference = new HfInference(process.env.HF_TOKEN);
+const model = "openai/clip-vit-large-patch14";
+type IndexedItem = { id: string; title: string; thumbUrl: string; embedding: number[] };
+
+export async function embedImage(blob: Blob) {
+  const raw = await inference.featureExtraction({ model, inputs: blob });
+  // Some providers return [embedding] instead of a flat array.
+  return Array.isArray(raw?.[0]) ? raw[0] : raw;
+}
+
+export function cosineSimilarity(a: number[], b: number[]) {
+  let dot = 0, na = 0, nb = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    na += a[i] * a[i];
+    nb += b[i] * b[i];
+  }
+  return dot / (Math.sqrt(na) * Math.sqrt(nb));
+}
+
+// Example search: uploadedBlob is the person's photo,
+// index is your cached embedding list
+export async function searchByPhoto(uploadedBlob: Blob, index: IndexedItem[]) {
+  const query = await embedImage(uploadedBlob);
+  return index
+    .map((item) => ({ ...item, score: cosineSimilarity(query, item.embedding) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10); // return your top-N matches to Roku
+}
+```
+
+Return the matches as a simple JSON feed (title, thumbnail, playback URL). To keep uploads private, delete the inbound photo after scoring, and refresh the cached embeddings periodically so new site content stays searchable.
