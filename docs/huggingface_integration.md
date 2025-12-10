@@ -129,6 +129,7 @@ import { HfInference } from "@huggingface/inference";
 
 const inference = new HfInference(process.env.HF_TOKEN);
 const model = "openai/clip-vit-large-patch14";
+type IndexedItem = { id: string; title: string; thumbUrl: string; embedding: number[] };
 
 export async function embedImage(blob: Blob) {
   const raw = await inference.featureExtraction({ model, inputs: blob });
@@ -147,8 +148,8 @@ export function cosineSimilarity(a: number[], b: number[]) {
 }
 
 // Example search: uploadedBlob is the person's photo,
-// index is an array of { id, title, thumbUrl, embedding }
-export async function searchByPhoto(uploadedBlob: Blob, index) {
+// index is your cached embedding list
+export async function searchByPhoto(uploadedBlob: Blob, index: IndexedItem[]) {
   const query = await embedImage(uploadedBlob);
   return index
     .map((item) => ({ ...item, score: cosineSimilarity(query, item.embedding) }))
