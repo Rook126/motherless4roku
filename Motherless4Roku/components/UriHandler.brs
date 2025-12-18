@@ -71,13 +71,16 @@ function addRequest(request as Object) as Boolean
   print "UriHandler.brs - [addRequest]"
   if type(request) = "roAssociativeArray"
     context = request.context
-  	if type(context) = "roSGNode"
+        if type(context) = "roSGNode"
       parameters = context.parameters
       if type(parameters)="roAssociativeArray"
         headers = parameters.headers
         method = parameters.method
-      	uri = parameters.uri
+        uri = parameters.uri
         if type(uri) = "roString"
+          if uri.left(5) = "pkg:/" then
+            return handleLocalResource(request)
+          end if
           urlXfer = createObject("roUrlTransfer")
           urlXfer.SetCertificatesFile("common:/certs/ca-bundle.crt")
           urlXfer.InitClientCertificates()
@@ -123,6 +126,39 @@ function addRequest(request as Object) as Boolean
     return false
   end if
   print "--------------------------------------------------------------------------"
+  return true
+end function
+
+'Handle resources packaged with the channel to avoid network requests for static assets'
+function handleLocalResource(request as object) as Boolean
+  parameters = request.context.parameters
+  uri = parameters.uri
+  content = ReadAsciiFile(uri)
+
+  if content = invalid
+    print "Error: unable to read local resource: " + uri
+    m.top.numBadRequests++
+    return false
+  end if
+
+  result = {
+    code: 200,
+    headers: {},
+    content: content,
+    num: request.context.context.num
+  }
+
+  job = { context: request }
+  job.context.context.response = result
+
+  if result.num = 0 then
+    parseResponse(job)
+  else if result.num = 1
+    parseLeaf(job)
+  else
+    print "Unhandled local request type: " + result.num.tostr()
+  end if
+
   return true
 end function
 
