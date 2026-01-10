@@ -19,7 +19,7 @@ sub init()
   m.array = invalid
 
   m.UriHandler  = createObject("roSGNode","UriHandler")
-  url = "https://gist.github.com/deejannon/c6e85dff84d601b0e435d14311d50042/raw/9efc53d09c8f77c5f3940a083de0a28bf3163280/categories.xml"
+  url = "pkg:/categories.xml"
   makeRequest({}, url, "GET", 0, "")
   m.UriHandler.observeField("content","onContentSet")
   m.UriHandler.observeField("categorycontent","onCategoryContentSet")
