@@ -145,7 +145,7 @@ function handleLocalResource(request as object) as Boolean
     code: 200,
     headers: {},
     content: content,
-    num: request.context.context.num
+    num: request.context.num
   }
 
   job = { context: request }
