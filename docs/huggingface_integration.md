@@ -136,9 +136,9 @@ If a user requests image editing without providing the source image, you should:
 
 1. **Prompt for the Image**: Request that the user provides the image through one of the supported methods. Example responses:
    ```
-   "I don't see any images provided. To perform image editing, please share the image 
-   you'd like to edit (as a URL, file upload, or description of where to find it) 
-   along with details about what changes you'd like to make."
+   "I don't see any images provided. To perform image editing, please share the actual 
+   image file you'd like to edit (as a URL, file upload, or blob) along with details 
+   about what changes you'd like to make."
    ```
    
    Or for a more specific context:
