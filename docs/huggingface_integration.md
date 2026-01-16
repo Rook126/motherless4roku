@@ -134,12 +134,16 @@ To successfully edit an image while preserving character features, you need:
 
 If a user requests image editing without providing the source image, you should:
 
-1. **Prompt for the Image**: Request that the user provides the image through one of the supported methods:
+1. **Prompt for the Image**: Request that the user provides the image through one of the supported methods. Example responses:
    ```
-   "I don't see any images available here, and I can't perform image editing directly. 
-   Could you clarify what you want to do with the images from that discussion? 
-   If you need them reviewed or summarized, please share the images or describe them, 
-   and let me know the specific task."
+   "I don't see any images provided. To perform image editing, please share the image 
+   you'd like to edit (as a URL, file upload, or description of where to find it) 
+   along with details about what changes you'd like to make."
+   
+   # Or for a more specific context:
+   "I can't perform image editing without a source image. Could you share the image 
+   you'd like to modify? Please also let me know what specific edits you need 
+   (e.g., wardrobe change, background replacement, style adjustment)."
    ```
 
 2. **Clarify the Task**: Ask specific questions about:
