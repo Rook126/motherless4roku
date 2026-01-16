@@ -106,6 +106,86 @@ if (topLabel.label !== "police uniform") {
 
 Because the call returns scores per label, you can decide whether to filter, re-route, or queue the asset based on its likelihood of matching the expected wardrobe style.
 
+## Image Editing Workflows
+
+When working with image editing requests, especially those that aim to preserve character identity while modifying other aspects (e.g., changing wardrobe, background, or pose), it's essential to have proper inputs and clear requirements before proceeding.
+
+### Requirements for Image Editing Tasks
+
+To successfully edit an image while preserving character features, you need:
+
+1. **Source Image**: The original image file containing the character or subject to be edited. This should be provided as:
+   - A URL pointing to an accessible image resource
+   - A local file path or File/Blob object
+   - Base64-encoded image data
+
+2. **Edit Instructions**: Clear description of what should be changed, such as:
+   - "Change the outfit to a police uniform"
+   - "Replace the background with a beach scene"
+   - "Modify the pose to standing with arms crossed"
+
+3. **Preservation Constraints**: Specification of what should remain unchanged:
+   - Face and facial features
+   - Body proportions
+   - Skin tone and hair color
+   - Overall character identity
+
+### Handling Missing Image Inputs
+
+If a user requests image editing without providing the source image, you should:
+
+1. **Prompt for the Image**: Request that the user provides the image through one of the supported methods:
+   ```
+   "I don't see any images available here, and I can't perform image editing directly. 
+   Could you clarify what you want to do with the images from that discussion? 
+   If you need them reviewed or summarized, please share the images or describe them, 
+   and let me know the specific task."
+   ```
+
+2. **Clarify the Task**: Ask specific questions about:
+   - What type of editing is needed (wardrobe change, background replacement, style transfer, etc.)
+   - Which elements should be preserved (character identity, pose, lighting, etc.)
+   - What the desired outcome looks like
+
+3. **Provide Alternative Solutions**: If the image cannot be provided, consider:
+   - Text-to-image generation with detailed character descriptions
+   - Reference image search to find similar content
+   - Describing the workflow so the user can implement it when they have the image
+
+### Example: Image Editing with Character Preservation
+
+For models that support image-to-image editing with instruction following (such as InstructPix2Pix-style models), you can structure requests like this:
+
+```ts
+import { HfInference } from "@huggingface/inference";
+
+const inference = new HfInference(process.env.HF_TOKEN);
+
+// Ensure the image is provided before proceeding
+if (!sourceImageBlob) {
+  throw new Error("Source image is required for editing. Please provide the image to edit.");
+}
+
+const editedImage = await inference.imageToImage({
+  model: "timbrooks/instruct-pix2pix",
+  inputs: sourceImageBlob,
+  parameters: {
+    prompt: "Change the outfit to a police uniform while keeping the same person and pose",
+    negative_prompt: "different person, different face, distorted features",
+    num_inference_steps: 50,
+    image_guidance_scale: 1.5,
+    guidance_scale: 7.5,
+  },
+});
+```
+
+### Best Practices
+
+- **Validate Inputs Early**: Check that all required images and parameters are provided before making API calls
+- **Set Clear Expectations**: Communicate what level of character preservation is achievable with the chosen model
+- **Handle Errors Gracefully**: Provide helpful error messages when inputs are missing or invalid
+- **Test with Sample Images**: Verify that your editing pipeline works with representative test cases before deploying
+
 ## Operational Tips
 
 - Rotate your access tokens regularly and prefer project-scoped tokens when possible.
