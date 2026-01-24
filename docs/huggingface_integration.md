@@ -1,4 +1,4 @@
-# Hugging Face Hub Integration Guide
+  # Hugging Face Hub Integration Guide
 
 This project can be extended with content that is generated or moderated by machine learning models hosted on the [Hugging Face Hub](https://huggingface.co/docs). The examples below demonstrate how to manage models programmatically and how to invoke different inference providers using the [Hugging Face Inference Endpoints JavaScript SDK](https://huggingface.co/docs/huggingface.js/inference/overview).
 
