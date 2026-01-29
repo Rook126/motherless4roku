@@ -76,9 +76,9 @@ const image = await inference.textToImage({
 - `chatResponse` contains the generated messages plus usage metadata. Persist or display the assistant response by reading `chatResponse.choices[0].message.content`.
 - `image` resolves to binary image data (for example, a `Blob`). To use it in a Roku application, write the blob to disk and load it as a texture or upload it to a CDN.
 
-## Moderate Wardrobe Galleries (e.g., Police Outfits)
+## Moderate Wardrobe Galleries (e.g., Bikinis)
 
-Uniform-focused galleries often need an automated review pass before they ship to production. The zero-shot image classification endpoint can tag incoming assets without building a custom model.
+Wardrobe-focused galleries often need an automated review pass before they ship to production. The zero-shot image classification endpoint can tag incoming assets without building a custom model.
 
 ```ts
 import { HfInference } from "@huggingface/inference";
@@ -88,18 +88,18 @@ const inference = new HfInference(process.env.HF_TOKEN);
 const classification = await inference.zeroShotImageClassification({
   model: "openai/clip-vit-large-patch14",
   inputs: {
-    image: await fetch("https://example.com/uploads/police-outfit.jpg").then((res) => res.blob()),
+    image: await fetch("https://example.com/uploads/bikini.jpg").then((res) => res.blob()),
     candidate_labels: [
-      "police uniform",
-      "casual wear",
+      "bikini",
+      "mannequin outfit",
       "swimwear",
-      "non-uniform costume",
+      "casual wear",
     ],
   },
 });
 
 const topLabel = classification.sort((a, b) => b.score - a.score)[0];
-if (topLabel.label !== "police uniform") {
+if (topLabel.label !== "bikini") {
   // Flag the asset for manual review or hide it from the Roku feed.
 }
 ```
